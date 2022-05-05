@@ -1,20 +1,26 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:homeversity_staff/loginPage.dart';
 
 final Map<int, Color> color = {
-  50: Color.fromRGBO(30, 94, 255, .1),
-  100: Color.fromRGBO(30, 94, 255, .2),
-  200: Color.fromRGBO(30, 94, 255, .3),
-  300: Color.fromRGBO(30, 94, 255, .4),
-  400: Color.fromRGBO(30, 94, 255, .5),
-  500: Color.fromRGBO(30, 94, 255, .6),
-  600: Color.fromRGBO(30, 94, 255, .7),
-  700: Color.fromRGBO(30, 94, 255, .8),
-  800: Color.fromRGBO(30, 94, 255, .9),
-  900: Color.fromRGBO(30, 94, 255, 1),
+  50: const Color.fromRGBO(30, 94, 255, .1),
+  100: const Color.fromRGBO(30, 94, 255, .2),
+  200: const Color.fromRGBO(30, 94, 255, .3),
+  300: const Color.fromRGBO(30, 94, 255, .4),
+  400: const Color.fromRGBO(30, 94, 255, .5),
+  500: const Color.fromRGBO(30, 94, 255, .6),
+  600: const Color.fromRGBO(30, 94, 255, .7),
+  700: const Color.fromRGBO(30, 94, 255, .8),
+  800: const Color.fromRGBO(30, 94, 255, .9),
+  900: const Color.fromRGBO(30, 94, 255, 1),
 };
 final MaterialColor customColor = MaterialColor(0xff1e5eff, color);
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,7 +29,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MaterialColor customColor = MaterialColor(0xff1e5eff, color);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -31,24 +36,6 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color.fromARGB(255, 30, 94, 255),
       ),
       home: const LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Homeversity Staff Login'),
-      ),
     );
   }
 }
