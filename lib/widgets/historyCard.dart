@@ -1,9 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SessionCard extends StatefulWidget {
-  const SessionCard({Key? key}) : super(key: key);
+  final String subName;
+  final String year;
+  final String section;
+  final String timeStamp;
+  const SessionCard(
+      {Key? key,
+      required this.subName,
+      required this.year,
+      required this.section,
+      required this.timeStamp})
+      : super(key: key);
 
   @override
   State<SessionCard> createState() => _SessionCardState();
@@ -35,16 +46,18 @@ class _SessionCardState extends State<SessionCard> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    "Real Time Operating System",
+                    widget.subName,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Color(0xff1e5eff)),
                   ),
                   Text(
-                    "4:30PM",
+                    DateFormat("dd-MM-yyyy")
+                        .format(DateTime.parse(widget.timeStamp))
+                        .toString(),
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -53,7 +66,7 @@ class _SessionCardState extends State<SessionCard> {
                 ],
               ),
               Text(
-                "3rd Year - C",
+                "${widget.year} - ${widget.section}",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,

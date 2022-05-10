@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:homeversity_staff/attendanceListPage.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
 import 'package:homeversity_staff/widgets/historyCard.dart';
 
@@ -35,22 +37,56 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
             SizedBox(
               height: 30,
             ),
-            Text(
-              "April 18, 2020",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black54),
-            ),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('attendanceList')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return ListView(
+                    shrinkWrap: true,
+                    children: snapshot.data!.docs.map((document) {
+                      return Center(
+                          child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AttendanceListPage(
+                                      code: document["code"],
+                                      timeStamp: document["createdAt"])));
+                        },
+                        child: SessionCard(
+                            subName: document["subName"],
+                            year: document["year"],
+                            section: document["section"],
+                            timeStamp: document["createdAt"]),
+                      ));
+                    }).toList(),
+                  );
+                }),
+            // Text(
+            //   "April 18, 2020",
+            //   style: TextStyle(
+            //       fontWeight: FontWeight.bold,
+            //       fontSize: 12,
+            //       color: Colors.black54),
+            // ),
             SizedBox(
               height: 20,
             ),
-            ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return SessionCard();
-                })
+            // ListView.builder(
+            //     itemCount: 3,
+            //     shrinkWrap: true,
+            //     itemBuilder: (context, index) {
+            //       return SessionCard();
+            //     })
           ],
         ),
       )),
