@@ -28,7 +28,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
             .limit(1)
             .get()
             .then((value) {
-          print(value.docs[0].data()["createdAt"]);
+          print(value.docs[0].data()["students"]);
         });
       }),
       appBar: AppBar(

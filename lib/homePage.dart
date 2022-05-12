@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:homeversity_staff/widgets/drawer.dart';
@@ -14,7 +15,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final firestoreInstance = FirebaseFirestore.instance;
+
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        FirebaseFirestore.instance
+            .collection("attendanceList")
+            .where("code", isEqualTo: 49833)
+            .orderBy("createdAt", descending: true)
+            .limit(1)
+            .get()
+            .then((value) {
+          print(value.docs[0].data()["students"]);
+        });
+        // firestoreInstance
+        //     .collection("attendanceList")
+        //     .where("code", isEqualTo: 49833)
+        //     .orderBy("createdAt", descending: true)
+        //     .limit(1)
+        //     .get()
+        //     .then((value) {
+        //   print(value.docs[0].data()["students"]);
+        // });
+      }),
       appBar: AppBar(
         title: const Text('Home'),
       ),
