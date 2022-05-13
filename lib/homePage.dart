@@ -18,26 +18,43 @@ class _HomePageState extends State<HomePage> {
     final firestoreInstance = FirebaseFirestore.instance;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        FirebaseFirestore.instance
-            .collection("attendanceList")
-            .where("code", isEqualTo: 49833)
-            .orderBy("createdAt", descending: true)
-            .limit(1)
-            .get()
-            .then((value) {
-          print(value.docs[0].data()["students"]);
-        });
-        // firestoreInstance
-        //     .collection("attendanceList")
-        //     .where("code", isEqualTo: 49833)
-        //     .orderBy("createdAt", descending: true)
-        //     .limit(1)
-        //     .get()
-        //     .then((value) {
-        //   print(value.docs[0].data()["students"]);
-        // });
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   FirebaseFirestore.instance
+      //       .collection("attendanceList")
+      //       .where("code", isEqualTo: 71145)
+      //       .orderBy("createdAt", descending: true)
+      //       .limit(1)
+      //       .get()
+      //       .then((value) {
+      //     print(value.docs[0].id);
+      //     firestoreInstance
+      //         .collection("attendanceList")
+      //         .doc(value.docs[0].id)
+      //         .update({
+      //       "students": FieldValue.arrayUnion([
+      //         {"registerNumber": 123004013, "name": "Madhavan"}
+      //       ])
+      //     });
+      //     firestoreInstance.collection("studentsList").doc("123004013").set({
+      //       "subName": FieldValue.arrayUnion([
+      //         {
+      //           "subName": value.docs[0].data()["subName"],
+      //           "createdAt": value.docs[0].data()["createdAt"],
+      //           "section": value.docs[0].data()["section"]
+      //         }
+      //       ])
+      //     });
+      //   }).then((value) => print("posted"));
+      //   // firestoreInstance
+      //   //     .collection("attendanceList")
+      //   //     .where("code", isEqualTo: 49833)
+      //   //     .orderBy("createdAt", descending: true)
+      //   //     .limit(1)
+      //   //     .get()
+      //   //     .then((value) {
+      //   //   print(value.docs[0].data()["students"]);
+      //   // });
+      // }),
       appBar: AppBar(
         title: const Text('Home'),
       ),

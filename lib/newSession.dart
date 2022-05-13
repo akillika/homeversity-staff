@@ -21,6 +21,7 @@ class _NewSessionpageState extends State<NewSessionpage> {
     TextEditingController subNameController = TextEditingController();
     TextEditingController yearController = TextEditingController();
     TextEditingController sectionController = TextEditingController();
+
     checkCodeExists(String subName, String year, String section) async {
       int generatedcode = 10000 + Random().nextInt(99999 - 10000);
       firestoreInstance
@@ -50,6 +51,11 @@ class _NewSessionpageState extends State<NewSessionpage> {
             "section": section,
             "createdAt": DateTime.now().toString(),
           });
+          SnackBar snackBar = SnackBar(
+            content: Text("Code generated"),
+            duration: Duration(seconds: 1),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       });
     }

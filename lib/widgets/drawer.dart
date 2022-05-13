@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:homeversity_staff/markAttendance.dart';
 import 'package:homeversity_staff/sessionHistory.dart';
 
 import '../homePage.dart';
@@ -64,6 +65,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SessionHistoryPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Mark Attendance'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MarkAttendance()),
               );
             },
           ),
