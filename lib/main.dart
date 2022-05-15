@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: customColor,
         primaryColor: const Color.fromARGB(255, 30, 94, 255),
       ),
-      home: const LoginPage(),
+      home: const LoadingPage(),
     );
   }
 }

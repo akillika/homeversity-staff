@@ -1,9 +1,11 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:homeversity_staff/main.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
+import 'package:uuid/uuid.dart';
 
 class MarkAttendance extends StatefulWidget {
   const MarkAttendance({Key? key}) : super(key: key);
@@ -54,42 +56,103 @@ class _MarkAttendanceState extends State<MarkAttendance> {
             GestureDetector(
               onTap: () {
                 FirebaseFirestore.instance
-                    .collection("attendanceList")
+                    .collection("codes")
                     .where("code", isEqualTo: int.tryParse(codeController.text))
                     .orderBy("createdAt", descending: true)
-                    .limit(1)
                     .get()
                     .then((value) {
-                  if (value.docs.isNotEmpty) {
-                    print(value.docs[0].id);
-                    FirebaseFirestore.instance
-                        .collection("attendanceList")
-                        .doc(value.docs[0].id)
-                        .update({
-                      "students": FieldValue.arrayUnion([
-                        {
-                          "registerNumber": 123004013,
-                          "name": "Madhavan",
-                          "time": DateTime.now().toString()
-                        }
-                      ])
-                    });
-                    FirebaseFirestore.instance
-                        .collection("studentsList")
-                        .doc("123004013")
-                        .update({
-                      "sessions": FieldValue.arrayUnion([
-                        {
-                          "subName": value.docs[0].data()["subName"],
-                          "createdAt": DateTime.now().toString(),
-                          "section": value.docs[0].data()["section"]
-                        }
-                      ])
-                    });
-                  } else {
-                    print("Enter valid Code");
-                  }
-                }).then((value) => print(" request completed"));
+                  print(value.docs.length);
+                  print(value.docs[0].data()["createdAt"]);
+                  FirebaseFirestore.instance
+                      .collection("attendanceList")
+                      .doc(value.docs[0].data()["createdAt"])
+                      .get()
+                      .then((valu) {
+                    if (valu.exists) {
+                      FirebaseFirestore.instance
+                          .collection("attendanceList")
+                          .doc(value.docs[0].data()["createdAt"])
+                          .update({
+                        "attendees": FieldValue.arrayUnion([
+                          {
+                            "registerNumber": 123004013,
+                            "name": "Akil",
+                            "time": DateTime.now().toString()
+                          }
+                        ])
+                      }).then((value) {
+                        print("Marked");
+                      });
+                    } else {
+                      FirebaseFirestore.instance
+                          .collection("attendanceList")
+                          .doc(value.docs[0].data()["createdAt"])
+                          .set({
+                        "code": value.docs[0].data()["code"],
+                        "subName": value.docs[0].data()["subName"],
+                        "year": value.docs[0].data()["year"],
+                        "section": value.docs[0].data()["section"],
+                        "createdAt": DateTime.now().toString(),
+                        "staff": value.docs[0].data()["staff"],
+                        "id": Uuid().v1(),
+                        "attendees": FieldValue.arrayUnion([])
+                      }).then((value) {
+                        print("Created new attendance List");
+                      });
+                      FirebaseFirestore.instance
+                          .collection("attendanceList")
+                          .doc(value.docs[0].data()["createdAt"])
+                          .update({
+                        "attendees": FieldValue.arrayUnion([
+                          {
+                            "registerNumber": 123004013,
+                            "name": "Akil",
+                            "time": DateTime.now().toString()
+                          }
+                        ])
+                      }).then((value) {
+                        print("Marked Attendance");
+                      });
+                    }
+                  });
+                });
+                // FirebaseFirestore.instance
+                //     .collection("codes")
+                //     .where("code", isEqualTo: int.tryParse(codeController.text))
+                //     .orderBy("createdAt", descending: true)
+                //     .limit(1)
+                //     .get()
+                //     .then((value) {
+                //   if (value.docs.isNotEmpty) {
+                //     print(value.docs[0].id);
+                // FirebaseFirestore.instance
+                //     .collection("attendanceList")
+                //     .doc(value.docs[0].id)
+                //     .update({
+                //   "students": FieldValue.arrayUnion([
+                //     {
+                //       "registerNumber": 123004013,
+                //       "name": "Madhavan",
+                //       "time": DateTime.now().toString()
+                //     }
+                //   ])
+                // });
+                //     FirebaseFirestore.instance
+                //         .collection("studentsList")
+                //         .doc("123004013")
+                //         .set({
+                //       "sessions": FieldValue.arrayUnion([
+                //         {
+                //           "subName": value.docs[0].data()["subName"],
+                //           "createdAt": DateTime.now().toString(),
+                //           "section": value.docs[0].data()["section"]
+                //         }
+                //       ])
+                //     });
+                //   } else {
+                //     print("Enter valid Code");
+                //   }
+                // }).then((value) => print(" request completed"));
               },
               child: Container(
                 height: 50,

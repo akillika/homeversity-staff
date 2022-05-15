@@ -1,16 +1,17 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
 import 'package:homeversity_staff/widgets/historyCard.dart';
 
 class AttendanceListPage extends StatefulWidget {
-  final int code;
+  final String id;
   final String timeStamp;
 
   const AttendanceListPage(
-      {Key? key, required this.code, required this.timeStamp})
+      {Key? key, required this.id, required this.timeStamp})
       : super(key: key);
 
   @override
@@ -18,6 +19,12 @@ class AttendanceListPage extends StatefulWidget {
 }
 
 class _AttendanceListPageState extends State<AttendanceListPage> {
+  @override
+  void initState() {
+    print(widget.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +50,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
           StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection("attendanceList")
-                  .where("code", isEqualTo: widget.code)
-                  .orderBy("createdAt", descending: true)
-                  .limit(1)
+                  .where("id", isEqualTo: widget.id)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -61,15 +66,16 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                     return Center(
                         child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: document["students"].length,
+                            itemCount: document["attendees"].length,
                             itemBuilder: (BuildContext context, int index) {
                               return SessionCard(
-                                  subName: document["students"][index]["name"],
-                                  year: document["students"][index]
+                                  subName: document["attendees"][index]["name"],
+                                  year: document["attendees"][index]
                                           ["registerNumber"]
                                       .toString(),
                                   section: '',
-                                  timeStamp: document["students"][index]["time"]
+                                  timeStamp: document["attendees"][index]
+                                          ["time"]
                                       .toString());
                             }));
                   }).toList(),

@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:homeversity_staff/authenticationHelper.dart';
+import 'package:homeversity_staff/loginPage.dart';
 import 'package:homeversity_staff/markAttendance.dart';
 import 'package:homeversity_staff/sessionHistory.dart';
 
@@ -80,7 +82,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           ListTile(
             title: const Text('Profile'),
-            onTap: () {},
+            onTap: () {
+              AuthenticationHelper().signOut().then((value) {
+                print(value);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Route<dynamic> route) => false,
+                );
+              });
+            },
           ),
         ],
       ),

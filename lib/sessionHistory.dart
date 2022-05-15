@@ -40,6 +40,7 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('attendanceList')
+                    .where("staff", isEqualTo: "a@gmail.com")
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -59,7 +60,7 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => AttendanceListPage(
-                                      code: document["code"],
+                                      id: document["id"].toString(),
                                       timeStamp: document["createdAt"])));
                         },
                         child: SessionCard(

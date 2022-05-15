@@ -66,7 +66,7 @@ class _SessionCardState extends State<SessionCard> {
                 ],
               ),
               Text(
-                "${widget.year} - ${widget.section}",
+                "${widget.year} ${widget.section}",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,

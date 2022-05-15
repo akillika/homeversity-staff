@@ -3,9 +3,11 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:homeversity_staff/main.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
+import 'package:uuid/uuid.dart';
 
 class NewSessionpage extends StatefulWidget {
   const NewSessionpage({Key? key}) : super(key: key);
@@ -42,15 +44,19 @@ class _NewSessionpageState extends State<NewSessionpage> {
             "subName": subName,
             "year": year,
             "section": section,
-            "createdAt": DateTime.now().toString()
-          }).then((value) => print("posted"));
-          firestoreInstance.collection("attendanceList").add({
-            "code": generatedcode,
-            "subName": subName,
-            "year": year,
-            "section": section,
             "createdAt": DateTime.now().toString(),
-          });
+            "staff": FirebaseAuth.instance.currentUser!.email,
+            "id": Uuid().v1()
+          }).then((value) => print("posted"));
+          // firestoreInstance.collection("attendanceList").add({
+          //   "code": generatedcode,
+          //   "subName": subName,
+          //   "year": year,
+          //   "section": section,
+          //   "createdAt": DateTime.now().toString(),
+          //   "staff": FirebaseAuth.instance.currentUser!.email,
+          //   "id": Uuid().v1()
+          // });
           SnackBar snackBar = SnackBar(
             content: Text("Code generated"),
             duration: Duration(seconds: 1),

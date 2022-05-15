@@ -82,67 +82,104 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              height: 140,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 5.0,
-                      spreadRadius: 0.0,
-                      offset: Offset(
-                        0.0,
-                        0.0,
-                      ),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "23423",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
+            StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection("codes").snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return ListView(
+                    shrinkWrap: true,
+                    children: snapshot.data!.docs.map((document) {
+                      return Center(
+                          child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: Container(
+                          height: 140,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.0,
+                                  offset: Offset(
+                                    0.0,
+                                    0.0,
+                                  ),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      document["code"].toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 40),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        FirebaseFirestore.instance
+                                            .collection("codes")
+                                            .doc(document.id)
+                                            .delete();
+                                        const snackBar = SnackBar(
+                                          content: Text('Code Deleted'),
+                                        );
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete_outline,
+                                        size: 30,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  document["subName"],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Color(0xff1e5eff)),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  document["createdAt"],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                        Icon(
-                          Icons.delete_outline,
-                          size: 30,
-                          color: Colors.red,
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Real Time Operating Systems",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xff1e5eff)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "April 14th - 4:30 PM",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Colors.black),
-                    )
-                  ],
-                ),
-              ),
-            )
+                      ));
+                    }).toList(),
+                  );
+                }),
           ],
         ),
       )),
