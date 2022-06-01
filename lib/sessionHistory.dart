@@ -40,7 +40,7 @@ class _SessionHistoryPageState extends State<SessionHistoryPage> {
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('attendanceList')
-                    .where("staff", isEqualTo: "a@gmail.com")
+                    .where("staff", isEqualTo: "akillika49@gmail.com")
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {

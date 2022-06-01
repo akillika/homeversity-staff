@@ -1,17 +1,12 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-
 import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:homeversity_staff/beacon.dart';
 import 'package:homeversity_staff/main.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 class NewSessionpage extends StatefulWidget {
@@ -30,7 +25,8 @@ class _NewSessionpageState extends State<NewSessionpage> {
     TextEditingController yearController = TextEditingController();
     TextEditingController sectionController = TextEditingController();
 
-    checkCodeExists(String subName, String year, String section) async {
+    checkCodeExists(
+        String subName, String year, String section, String beaconUuid) async {
       int generatedcode = 10000 + Random().nextInt(99999 - 10000);
       firestoreInstance
           .collection("codes")
@@ -40,7 +36,7 @@ class _NewSessionpageState extends State<NewSessionpage> {
         if (value.exists) {
           print("exists");
           generatedcode = 10000 + Random().nextInt(99999 - 10000);
-          checkCodeExists(subName, year, section);
+          checkCodeExists(subName, year, section, beaconUuid);
         } else {
           firestoreInstance
               .collection("codes")
@@ -52,7 +48,8 @@ class _NewSessionpageState extends State<NewSessionpage> {
             "section": section,
             "createdAt": DateTime.now().toString(),
             "staff": FirebaseAuth.instance.currentUser!.email,
-            "id": Uuid().v1()
+            "id": Uuid().v1(),
+            "beaconUuid": beaconUuid,
           }).then((value) => print("posted"));
           // firestoreInstance.collection("attendanceList").add({
           //   "code": generatedcode,
@@ -141,8 +138,9 @@ class _NewSessionpageState extends State<NewSessionpage> {
             ),
             GestureDetector(
               onTap: () async {
-                // checkCodeExists(subNameController.text, yearController.text,
-                //     sectionController.text);
+                var beaconUuid = Uuid().v1();
+                checkCodeExists(subNameController.text, yearController.text,
+                    sectionController.text, beaconUuid);
 
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => BeaconPage()));
@@ -152,8 +150,10 @@ class _NewSessionpageState extends State<NewSessionpage> {
                 // status = await Permission.bluetoothScan.status;
 
                 // print("Status: $status");
+
+                print(beaconUuid);
                 beaconBroadcast
-                    .setUUID('29ED98FF-2900-441A-802F-9C398FC199D2')
+                    .setUUID(beaconUuid)
                     .setMajorId(1)
                     .setMinorId(100)
                     .start();
