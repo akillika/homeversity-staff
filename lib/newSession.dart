@@ -1,12 +1,17 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:beacon_broadcast/beacon_broadcast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:homeversity_staff/beacon.dart';
 import 'package:homeversity_staff/main.dart';
 import 'package:homeversity_staff/widgets/drawer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 class NewSessionpage extends StatefulWidget {
@@ -17,6 +22,7 @@ class NewSessionpage extends StatefulWidget {
 }
 
 class _NewSessionpageState extends State<NewSessionpage> {
+  BeaconBroadcast beaconBroadcast = BeaconBroadcast();
   @override
   Widget build(BuildContext context) {
     final firestoreInstance = FirebaseFirestore.instance;
@@ -67,6 +73,9 @@ class _NewSessionpageState extends State<NewSessionpage> {
     }
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (() {
+        beaconBroadcast.stop();
+      })),
       appBar: AppBar(
         title: const Text('Homeversity Staff Portal'),
       ),
@@ -131,9 +140,23 @@ class _NewSessionpageState extends State<NewSessionpage> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () {
-                checkCodeExists(subNameController.text, yearController.text,
-                    sectionController.text);
+              onTap: () async {
+                // checkCodeExists(subNameController.text, yearController.text,
+                //     sectionController.text);
+
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => BeaconPage()));
+                // var status = await Permission.bluetooth.status;
+                // status = await Permission.bluetoothAdvertise.status;
+                // status = await Permission.bluetoothConnect.status;
+                // status = await Permission.bluetoothScan.status;
+
+                // print("Status: $status");
+                beaconBroadcast
+                    .setUUID('29ED98FF-2900-441A-802F-9C398FC199D2')
+                    .setMajorId(1)
+                    .setMinorId(100)
+                    .start();
               },
               child: Container(
                 height: 50,
