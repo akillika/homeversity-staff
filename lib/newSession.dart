@@ -70,9 +70,9 @@ class _NewSessionpageState extends State<NewSessionpage> {
     }
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (() {
-        beaconBroadcast.stop();
-      })),
+      // floatingActionButton: FloatingActionButton(onPressed: (() {
+      //   beaconBroadcast.stop();
+      // })),
       appBar: AppBar(
         title: const Text('Homeversity Staff Portal'),
       ),
